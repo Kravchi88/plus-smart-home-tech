@@ -6,6 +6,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.collector.model.sensor.SensorEvent;
 import ru.yandex.practicum.collector.model.sensor.ClimateSensorEvent;
@@ -24,10 +25,13 @@ public class SensorEventService {
 
     private final Producer<String, SpecificRecordBase> kafkaProducer;
 
+    @Value("${topic.sensor-events}")
+    private String sensorEventsTopic;
+
     public void processEvent(SensorEvent event) {
         SensorEventAvro avro = mapToAvro(event);
         log.info("SensorEvent отправляется в Kafka с payload: {}", avro.getPayload().getClass().getSimpleName());
-        kafkaProducer.send(new ProducerRecord<>("telemetry.sensors.v1", avro.getId(), avro));
+        kafkaProducer.send(new ProducerRecord<>(sensorEventsTopic, avro.getId(), avro));
     }
 
     private SensorEventAvro mapToAvro(SensorEvent event) {
