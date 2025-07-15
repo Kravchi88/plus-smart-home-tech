@@ -36,7 +36,9 @@ public class SensorEventService {
     }
 
     private SensorEventAvro mapToAvro(SensorEvent event) {
-        long timestamp = event.getTimestamp() != null ? event.getTimestamp().toEpochMilli() : Instant.now().toEpochMilli();
+        Instant timestamp = event.getTimestamp() != null
+                ? event.getTimestamp()
+                : Instant.now();
 
         SpecificRecord payload = switch (event.getType()) {
             case LIGHT_SENSOR_EVENT -> LightSensorAvro.newBuilder()
