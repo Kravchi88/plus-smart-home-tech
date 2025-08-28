@@ -1,0 +1,17 @@
+grpc:
+  server:
+    port: 59091
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      schema.registry.url: http://localhost:8081
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    client-id: collector-service
+
+topic:
+  hub-events: telemetry.hubs.v1
+  sensor-events: telemetry.sensors.v1
