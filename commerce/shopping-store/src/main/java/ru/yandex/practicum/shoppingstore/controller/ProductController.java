@@ -2,7 +2,7 @@ package ru.yandex.practicum.shoppingstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,11 +27,8 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public Page<ProductDto> getProducts(@RequestParam ProductCategory category,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "10") int size,
-                                        @RequestParam(defaultValue = "productName") String sort) {
-        return service.getProductsByCategory(category, PageRequest.of(page, size, org.springframework.data.domain.Sort.by(sort)));
+    public Page<ProductDto> getProducts(@RequestParam ProductCategory category, Pageable pageable) {
+        return service.getProductsByCategory(category, pageable);
     }
 
     @PutMapping
