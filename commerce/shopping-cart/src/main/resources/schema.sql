@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS shopping_cart CASCADE;
 CREATE TABLE shopping_cart (
     shopping_cart_id UUID PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    state VARCHAR(255) CHECK (state IN ('ACTIVE', 'DEACTIVATED'))
+    state VARCHAR(25) CHECK (state IN ('ACTIVE', 'DEACTIVATED'))
 );
 
 CREATE TABLE cart_products (
