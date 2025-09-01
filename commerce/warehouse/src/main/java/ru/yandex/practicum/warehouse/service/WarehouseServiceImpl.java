@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.warehouse.dto.AddProductToWarehouseRequest;
 import ru.yandex.practicum.warehouse.dto.AddressDto;
 import ru.yandex.practicum.warehouse.dto.BookedProductsDto;
+import ru.yandex.practicum.warehouse.dto.DimensionDto;
 import ru.yandex.practicum.warehouse.dto.NewProductInWarehouseRequest;
 import ru.yandex.practicum.warehouse.dto.ShoppingCartDto;
 import ru.yandex.practicum.warehouse.model.Dimension;
@@ -32,18 +33,28 @@ public class WarehouseServiceImpl implements WarehouseService {
         currentAddress = ADDRESSES[i];
     }
 
+
     @Override
     public void registerNewProduct(NewProductInWarehouseRequest request) {
         if (repository.existsById(request.getProductId())) {
             throw new IllegalStateException("Product already exists on warehouse");
         }
+
+        DimensionDto dd = request.getDimension();
+        Dimension dimension = dd == null ? null : Dimension.builder()
+                .width(dd.getWidth())
+                .height(dd.getHeight())
+                .depth(dd.getDepth())
+                .build();
+
         WarehouseProduct product = WarehouseProduct.builder()
                 .productId(request.getProductId())
                 .fragile(request.isFragile())
-                .dimension(request.getDimension())
+                .dimension(dimension)
                 .weight(request.getWeight())
                 .quantity(0L)
                 .build();
+
         repository.save(product);
     }
 
